@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GeoGebra and JavaScript</title>
+    <script src="navigation.js"></script>
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+</head>
+<style>
+    div.contentBox {
+        opacity: 0.9;
+    }
+</style>
+
+<body>
+    <div class="contentBox" id="contentBox">
+        <div id="ggbApplet"></div>
+        <div id="ggbApplet2"></div>
+        <script type="text/javascript">
+            function ggbOnInit(param) {
+                if (param == "ggbApplet") {
+                    // init update listeners for ggbApplet1
+                    ggbApplet.registerObjectUpdateListener("a", "abcListener");
+                    ggbApplet.registerObjectUpdateListener("b", "abcListener");
+                    ggbApplet.registerObjectUpdateListener("c", "abcListener");
+                    ggbApplet.registerObjectUpdateListener("A", "pointListener");
+                }
+            }
+
+            function abcListener(objName) {
+                // get value from applet1 and set value in applet2
+                var changedValue = ggbApplet.getValue(objName);
+                ggbApplet2.setValue(objName, changedValue);
+            }
+
+            function pointListener(objName) {
+                // get x-coord from the changed point A in applet1
+                // and set point B in applet2
+                xcoord = ggbApplet.getXcoord("A");
+                ggbApplet2.setCoords("B", xcoord, 0);
+            }
+
+            var parameters = {
+                id: "ggbApplet",
+                width: 750,
+                height: 750,
+                showMenuBar: false,
+                showAlgebraInput: false,
+                showToolBar: false,
+                showToolBarHelp: false,
+                showResetIcon: false,
+                enableLabelDrags: false,
+                enableShiftDragZoom: true,
+                enableRightClick: false,
+                errorDialogsActive: false,
+                useBrowserForJS: true,
+                preventFocus: false,
+                language: "en",
+                // use this instead of ggbBase64 to load a material from GeoGebra Materials Platform
+                // "material_id":12345,
+                material_id: "zpe5cz6d",
+            };
+
+            // is3D=is 3D applet using 3D view, AV=Algebra View, SV=Spreadsheet View, CV=CAS View, EV2=Graphics View 2, CP=Construction Protocol, PC=Probability Calculator, DA=Data Analysis, FI=Function Inspector, PV=Python, macro=Macro View
+            var views = {
+                is3D: 0,
+                AV: 1,
+                SV: 0,
+                CV: 0,
+                EV2: 0,
+                CP: 0,
+                PC: 0,
+                DA: 0,
+                FI: 0,
+                PV: 0,
+                macro: 0,
+            };
+
+            var applet = new GGBApplet(parameters, true);
+            window.onload = function() {
+                applet.inject("ggbApplet");
+            };
+        </script>
+    </div>
+</body>
+
+</html>
